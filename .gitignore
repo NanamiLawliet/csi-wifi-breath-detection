@@ -6,6 +6,12 @@ __pycache__/
 venv/
 .venv/
 
+# Generated output images
+*.png
+
+# External third-party models (download separately)
+*.task
+
 # IDE
 .vscode/
 .idea/

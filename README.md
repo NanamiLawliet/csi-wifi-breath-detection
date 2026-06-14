@@ -1,85 +1,85 @@
-# Wi-Fi CSI Tabanlı Nefes Takip Sistemi
+# Wi-Fi CSI Based Respiration Monitoring System
 
-ESP32 çift cihaz arasındaki Wi-Fi CSI (Channel State Information) sinyali ve RGB kamera kullanarak temas gerektirmeden gerçek zamanlı nefes hızı (BPM) ölçümü.
-
----
-
-## Belgeler
-
-- [Sistem Dokümantasyonu (TR)](SISTEM_DOKUMANTASYONU.md) — Mimari, modüller, kurulum ve sorun giderme
-- [Teknik Sistem Dokümantasyonu (TR)](SYSTEM_TECHNICAL_DOC.md) — Sinyal işleme pipeline, algoritmalar, analiz sonuçları
+Contactless real-time respiration rate (BPM) measurement using Wi-Fi CSI (Channel State Information) signals between two ESP32 devices and an RGB camera.
 
 ---
 
-## Proje Dosyaları
+## Documentation
 
-### Python Yazılımı
+- [System Documentation](SYSTEM_DOCUMENTATION.md) — Architecture, modules, installation and troubleshooting
+- [Technical System Documentation](SYSTEM_TECHNICAL_DOC.md) — Signal processing pipeline, algorithms, analysis results
 
-| Dosya | Açıklama |
-|-------|----------|
-| `csi_dual_monitor.py` | Çift modaliteli gerçek zamanlı monitör (CSI + Kamera) |
-| `csi_live_monitor.py` | Sadece CSI tabanlı canlı monitör |
-| `csi_classifier.py` | CNN+BiLSTM nefes sınıflandırıcısı (eğitim + test) |
-| `csi_1d_bilstm.py` | 1D-CNN + BiLSTM hibrit modeli |
-| `analyze_csi.py` | Temel CSI veri analizi |
-| `analyze_csi_advanced.py` | Gelişmiş CSI analizi (BNR, PCA, FFT) |
-| `analyze_new_csi.py` | Güncel analiz pipeline'ı |
+---
+
+## Project Files
+
+### Python Software
+
+| File | Description |
+|------|-------------|
+| `csi_dual_monitor.py` | Dual-modality real-time monitor (CSI + Camera) |
+| `csi_live_monitor.py` | CSI-only live monitor |
+| `csi_classifier.py` | CNN+BiLSTM respiration classifier (training + testing) |
+| `csi_1d_bilstm.py` | 1D-CNN + BiLSTM hybrid model |
+| `analyze_csi.py` | Basic CSI data analysis |
+| `analyze_csi_advanced.py` | Advanced CSI analysis (BNR, PCA, FFT) |
+| `analyze_new_csi.py` | Current analysis pipeline |
 
 ### Firmware
 
-| Dosya | Açıklama |
-|-------|----------|
-| `main.c` | ESP32 CSI toplama firmware'i (ESP-IDF) |
+| File | Description |
+|------|-------------|
+| `main.c` | ESP32 CSI collection firmware (ESP-IDF) |
 
-### Eğitilmiş Modeller
+### Trained Models
 
-| Dosya | Açıklama |
-|-------|----------|
-| `best_csi_model.keras` | CNN+BiLSTM Keras modeli |
-| `best_1d_model.keras` | 1D-CNN+BiLSTM Keras modeli |
-| `best_csi_model.pth` | PyTorch model ağırlıkları |
+| File | Description |
+|------|-------------|
+| `best_csi_model.keras` | CNN+BiLSTM Keras model |
+| `best_1d_model.keras` | 1D-CNN+BiLSTM Keras model |
+| `best_csi_model.pth` | PyTorch model weights |
 
-### Veri Setleri
+### Datasets
 
-| Dosya | Açıklama |
-|-------|----------|
-| `csi_data_5bpm_breath.csv` | 5 nefes/dk ölçüm verisi |
-| `csi_data_10bpm_breath.csv` | 10 nefes/dk ölçüm verisi |
-| `csi_data_25bpm_breath.csv` | 25 nefes/dk ölçüm verisi |
-| `csi_data_long_breath.csv` | Uzun süreli nefes verisi |
-| `csi_data_empty_room.csv` | Boş oda referans verisi |
-| `csi_data_empty_my_room.csv` | Boş oda referans verisi (2. ortam) |
-
----
-
-## Donanım
-
-- **TX ESP32**: CSI paketleri gönderir (ESP-NOW)
-- **RX ESP32**: CSI alır, USB Serial ile PC'ye iletir
-- **PC**: Python GUI ile gerçek zamanlı işleme ve görselleştirme
-- **Kamera**: Opsiyonel görsel referans (MediaPipe Pose)
+| File | Description |
+|------|-------------|
+| `csi_data_5bpm_breath.csv` | 5 breaths/min measurement data |
+| `csi_data_10bpm_breath.csv` | 10 breaths/min measurement data |
+| `csi_data_25bpm_breath.csv` | 25 breaths/min measurement data |
+| `csi_data_long_breath.csv` | Long-duration breath data |
+| `csi_data_empty_room.csv` | Empty room reference data |
+| `csi_data_empty_my_room.csv` | Empty room reference data (2nd environment) |
 
 ---
 
-## Kurulum
+## Hardware
+
+- **TX ESP32**: Transmits CSI packets (ESP-NOW)
+- **RX ESP32**: Receives CSI, forwards to PC via USB Serial
+- **PC**: Real-time processing and visualization with Python GUI
+- **Camera**: Optional visual reference (MediaPipe Pose)
+
+---
+
+## Installation
 
 ```bash
 pip install numpy scipy matplotlib pyserial opencv-python mediapipe tensorflow torch scikit-learn
 ```
 
-Detaylı kurulum için [Sistem Dokümantasyonu](SISTEM_DOKUMANTASYONU.md#kurulum-ve-çalıştırma) bölümüne bakın.
+For detailed setup see the [System Documentation](SYSTEM_DOCUMENTATION.md#installation-and-setup) section.
 
 ---
 
-## Kullanım
+## Usage
 
 ```bash
-# Çift modaliteli monitör (CSI + Kamera)
+# Dual-modality monitor (CSI + Camera)
 python csi_dual_monitor.py
 
-# Sadece CSI monitörü
+# CSI-only monitor
 python csi_live_monitor.py
 
-# Kayıtlı veri analizi
+# Recorded data analysis
 python analyze_new_csi.py
 ```
